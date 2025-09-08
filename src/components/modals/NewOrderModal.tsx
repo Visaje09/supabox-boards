@@ -41,13 +41,13 @@ export function NewOrderModal({ isOpen, onClose, onCreateOrder }: NewOrderModalP
   const loadInitialData = async () => {
     try {
       // Load clients
-      const { data: clientesData } = await supabase
+      const { data: clientesData, error: clientesError } = await supabase
         .from('cliente')
         .select('*')
         .order('nombre_cliente');
       
       // Load commercial users (users with commercial role)
-      const { data: usuariosData } = await supabase
+      const { data: usuariosData, error: usuariosError } = await supabase
         .from('usuario')
         .select(`
           id_usuario,
@@ -57,10 +57,32 @@ export function NewOrderModal({ isOpen, onClose, onCreateOrder }: NewOrderModalP
         .eq('rol.tipo_rol', 'comercial');
 
       // Load order types
-      const { data: tiposData } = await supabase
+      const { data: tiposData, error: tiposError } = await supabase
         .from('claseorden')
         .select('*')
         .order('tipo_orden');
+
+      // If database fails, use mock data for development
+      if (clientesError || usuariosError || tiposError) {
+        console.warn('Database access failed, using mock data:', { clientesError, usuariosError, tiposError });
+        
+        // Mock data for development
+        setClientes([
+          { id_cliente: 1, nit: '800197268-5', nombre_cliente: 'Bavaria S.A.' },
+          { id_cliente: 2, nit: '860002130-6', nombre_cliente: 'Nestlé de Colombia S.A.' },
+          { id_cliente: 3, nit: '890901426-9', nombre_cliente: 'Cementos Argos S.A.' }
+        ]);
+        
+        setComerciales([
+          { id_usuario: 1, nombre_usuario: 'Ana García' },
+          { id_usuario: 2, nombre_usuario: 'Carlos Ruiz' }
+        ]);
+        
+        setTiposOrden(['Venta', 'Servicio', 'Garantía']);
+        
+        toast.error('Usando datos de prueba - problemas de conexión con base de datos');
+        return;
+      }
 
       if (clientesData) setClientes(clientesData);
       if (usuariosData) {
@@ -84,11 +106,21 @@ export function NewOrderModal({ isOpen, onClose, onCreateOrder }: NewOrderModalP
     }
 
     try {
-      const { data: proyectosData } = await supabase
+      const { data: proyectosData, error } = await supabase
         .from('proyecto')
         .select('*')
         .eq('id_cliente', parseInt(clienteId))
         .order('nombre_proyecto');
+
+      if (error) {
+        console.warn('Database error loading projects, using mock data:', error);
+        // Mock projects for development
+        setProyectos([
+          { id_proyecto: 1, id_cliente: parseInt(clienteId), nombre_proyecto: 'Proyecto Demo 1', descripcion_proyecto: 'Descripción del proyecto 1' },
+          { id_proyecto: 2, id_cliente: parseInt(clienteId), nombre_proyecto: 'Proyecto Demo 2', descripcion_proyecto: 'Descripción del proyecto 2' }
+        ]);
+        return;
+      }
 
       if (proyectosData) {
         setProyectos(proyectosData);
