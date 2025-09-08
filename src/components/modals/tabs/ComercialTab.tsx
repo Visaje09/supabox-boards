@@ -46,7 +46,7 @@ export function ComercialTab({ order, onUpdateOrder }: ComercialTabProps) {
         .select(`
           id_usuario,
           nombre_usuario,
-          rol!inner(tipo_rol)
+          rol!usuario_id_rol_fkey(tipo_rol)
         `)
         .eq('rol.tipo_rol', 'comercial');
 
