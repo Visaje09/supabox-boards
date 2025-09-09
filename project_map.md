@@ -1,40 +1,40 @@
 Project Map: ERP Gestión de Órdenes (Lovable)
 Estructura General de la App
-Órdenes de Pedido: Listado, creación, edición, consulta y gestión detallada por fases.
+Órdenes de Pedido: Listado, creación, edición, consulta y gestión detallada en varias fases.
 
-Por Gestionar: Pedidos con tareas pendientes de inventario, logística, facturación, etc.
+Por Gestionar: Panel de pedidos con tareas pendientes de inventario, logística, facturación, etc.
 
-Clientes y Proyectos: Catálogo de terceros, proyectos y vínculos de órdenes.
+Clientes y Proyectos: Catálogo de terceros y sus proyectos, con vista de órdenes asociadas por cliente/proyecto.
 
 Productos y Servicios: Gestión centralizada de catálogos y variantes.
 
-Reportes: Panel de informes parametrizables/exportables según filtros.
+Reportes: Panel de informes parametrizables y exportables por filtros avanzados.
 
-Configuración: Ajustes globales, gestión de usuarios, roles, transportadoras y catálogos.
+Configuración: Ajustes globales, administración de usuarios, roles, transportadoras y catálogos generales.
 
-Bitácora/Auditoría: Acceso a historial de acciones, cambios y trazabilidad en todo el ERP.
+Bitácora/Auditoría: Consultas de historial de acciones, cambios y trazabilidad global.
 
-Barra Superior/Notificaciones: Estado de usuario, tareas pendientes, mensajes de sistema.
+Barra Superior/Notificaciones: Estado de usuario activo, actividades, tareas pendientes y mensajes del sistema.
 
-Relación de Páginas, Componentes y Funcionalidades
+Relación de Páginas y Componentes
 Menú Principal
 Órdenes de Pedido
 
-Detalle editable, cambio de estado visual ("Creado", "En validación", etc.), historial y totalización.
+Detalle editable, cambio de estado visual (Creado, En validación, Listo para entrega, etc.), historial y totalización.
 
-Roles y permisos condicionan acciones posibles (editar, cancelar, confirmar, exportar, etc.).
+Acciones sujetas a roles y permisos (editar, cancelar, confirmar, exportar, etc.).
 
-Validación de catálogos al guardar (cliente, producto).
+Validación de existencia en catálogos de cliente y producto al guardar.
 
 Por Gestionar
 
-Filtros rápidos para órdenes en procesos pendientes.
+Filtros rápidos sobre pedidos en fases pendientes según inventario, logística, facturación u otros.
 
 Clientes y Proyectos
 
-Alta, consulta, edición, desactivación de clientes/proyectos.
+Alta, consulta, edición y desactivación de clientes y proyectos.
 
-Asociación múltiple órdenes–proyectos/cliente.
+Relación múltiple entre órdenes, proyectos y cada cliente.
 
 Productos y Servicios
 
@@ -44,40 +44,47 @@ Gestión de operadores, planes, servicios asociados.
 
 Reportes
 
-Generación y exportación de reportes detallados de órdenes, clientes, productos, facturación.
+Generación y exportación de reportes detallados por pedido, cliente, producto o facturación.
 
-Filtrado avanzado por estado, cliente, fecha, tipo.
+Filtrado avanzado (estado, cliente, fecha, tipo).
 
 Configuración
 
-Panel para catálogos generales: transportadoras, métodos de pago, tipos de orden, roles de usuario.
+Panel para catálogos (transportadoras, métodos de pago, tipos de orden), usuarios, roles.
 
-Administración de roles y permisos.
+Administración granular de roles y permisos.
 
 Bitácora/Auditoría
 
-Consulta de historial visible y auditable por cambios en órdenes y entidades.
-
-Estado detallado y responsable en cada cambio.
+Consultas de historial visible y auditable por cambios y responsables de cada acción en cualquier entidad.
 
 Detalle y Secciones de una Orden de Pedido
-Cabecera: Identificador visible (Ej. “OP-[Código]”), estado visual, cliente, proyecto, comercial encargado, fechas, tipo de orden, condiciones y método de pago, lista de precios.
+Cabecera:
+Identificador visible (Ej. “OP-[Código]”), estado de la orden, cliente, proyecto, comercial encargado, fechas relevantes, tipo de orden, condiciones/método de pago, lista de precios.
 
-Líneas de Pedido: Tabla editable de productos/servicios, cantidad, valor, impuestos, descuentos, operador, plan, permanencia, observaciones.
+Líneas de Pedido:
+Tabla editable: productos/servicios, cantidad, precios unitarios y totales, impuestos/retenciones, descuentos, operador, plan, permanencia, observaciones.
 
-Productos/Servicios Opcionales: Upselling, añadidos.
+Productos/Servicios Opcionales:
+Upselling/agregados relacionados con la orden.
 
-Logística y Despacho: Método y detalles de despacho, dirección/contacto, valor flete/seguro, estado/envío, historial.
+Logística y Despacho:
+Método, transportadora, dirección y contacto de despacho, valor flete/seguro, estado/historial logístico.
 
-Soporte/Observaciones: Comentarios internos, alertas técnicas, soporte y detalles técnicos.
+Soporte/Observaciones:
+Espacio para comentarios internos, alertas técnicas, soporte u observaciones detalladas.
 
-Adjuntos: Documentos digitales de contrato, facturas, remisiones, soporte de entrega.
+Adjuntos:
+Gestión de documentos digitales relevantes: contratos, remisiones, facturas, actas.
 
-Trazabilidad/Historial: Cambios de usuario/estado por fase, timeline visual.
+Trazabilidad/Historial:
+Timeline visual de cambios de usuario, responsable, estado y mensajes/rechazos.
 
-Notas: Espacio para apuntes visibles/internos según permisos.
+Notas:
+Notas visibles/internas según permisos/rol.
 
-Totalización: Subtotales, descuentos, impuestos, total general, términos y condiciones.
+Totalización:
+Subtotal, impuestos, descuentos globales, total final en moneda del pedido, vista de términos y condiciones.
 
 Estructura de Archivos/Componentes Clave
 /pages
@@ -98,23 +105,23 @@ Estructura de Archivos/Componentes Clave
 
 OrderDetail, OrderLineTable, ClientSelector, ProjectSelector, ProductSelector, ServiceUpsell, LogisticsPanel, AttachmentsPanel, AuditTimeline, NotesSection
 
-/api: endpoints/servicios para todas las entidades principales.
+/api: Endpoints/servicios para las entidades principales.
 
-/utils: helpers para permisos, validaciones, matemática de impuestos/descuentos.
+/utils: Helpers de permisos, validaciones, cálculos de impuestos/descuentos.
 
-Tablas Principales Supabase (sin ingreso producción)
+Tablas Principales Supabase (sin ingreso a producción)
 Tabla	Propósito/Descripción	Columnas relevantes
 usuario	Usuarios del sistema y autenticación	idusuario, nombreusuario, contrasena, idrol
 rol	Catálogo de roles y permisos	idrol, tiporol
-responsableorden	Asignación multiárea de responsables y trazabilidad	idordenpedido, idusuario, idrol, timestamps
+responsableorden	Trazabilidad y asignación de responsables por área/fase	idordenpedido, idusuario, idrol, timestamps
 cliente	Catálogo de clientes para órdenes	idcliente, nombrecliente, nit
 proyecto	Catálogo de proyectos por cliente	idproyecto, idcliente, nombreproyecto, descripcion
 claseorden	Tipos de orden (Venta, Renta, Préstamo, Reposición, etc.)	idclaseorden, tipoorden
-ordenpedido	Entidad central: cabecera de Órdenes	idordenpedido, estado, idcliente, idproyecto, fechas
-detalleorden	Detalle de productos/servicios por orden	idordendetalle, idordenpedido, idproducto, cantidad
-lineadetalle	Config. especial servicios (operador, plan, APN, permanencia, valor)	idlineadetalle, idordendetalle, idoperador, idplan
-producto	Catálogo general de productos y servicios asociados	idproducto, tipoproducto, descripcion
-metododespacho	Métodos y dirección/contactos de despacho	idmetododespacho, tipodespacho, direccion, contacto
+ordenpedido	Cabecera principal de órdenes	idordenpedido, estado, idcliente, idproyecto, fechas
+detalleorden	Detalle de productos/servicios en cada orden	idordendetalle, idordenpedido, idproducto, cantidad
+lineadetalle	Config. especial servicios (operador, plan, APN, valor)	idlineadetalle, idordendetalle, idoperador, idplan
+producto	Catálogo general de productos y servicios	idproducto, tipoproducto, descripcion
+metododespacho	Métodos/dirección/contactos para despachos	idmetododespacho, tipodespacho, direccion, contacto
 transportadora	Catálogo de transportadoras	idtransportadora, nombretransportadora
 remision	Remisiones y evidencia de entrega	idremision, numeroremision, fecharemision, idordenpedido
 factura	Facturas y comprobantes por orden	idfactura, idordenpedido, fechafactura, estadofactura
@@ -122,11 +129,44 @@ tipopago	Formas y plazos de pago	idtipopago, formapago, plazo
 operador	Catálogo operadores de servicio	idoperador, nombreoperador
 plan	Catálogo de planes asociados a operadores	idplan, idoperador, nombreplan
 apn	APN y configuración de líneas especiales	idapn, idoperador, configInfo (IP, etc.)
-Relaciones y Flujos
-Todas las operaciones requieren validación de FK antes de crear registros asociados para integridad.
+Relaciones y Flujos Clave
+Todas las operaciones requieren validación de claves foráneas antes de crear registros dependientes para asegurar integridad de datos.
 
-Historial y responsable: Encapsulado en tabla responsableorden para trazabilidad multiárea, usuario, tiempo.
+Todo cambio relevante queda traza y responsable en la tabla responsableorden para perfecta trazabilidad multiárea, por usuario y por tiempo.
 
-La lógica de edición/visualización siempre está filtrada por FK rol y estado de orden.
+La edición y visualización de las órdenes y registros se filtra por permisos y estado de la orden (según rol/FK).
 
-Cada área procesa solo los campos que necesita, pero la consulta de orden recupera todo el contexto via joins.
+Cada área/tab solo edita/consulta los campos que le corresponden, pero la vista consolidada de la orden recupera todo el contexto vía joins.
+
+Flujo Tabulado de la Orden de Pedido
+Creación de orden de pedido:
+Datos de cliente, proyecto y comercial encargado.
+
+Comercial Tab:
+Productos (referencia), cantidad, servicios, líneas detalle (si aplica), clase de cobro, valor.
+
+Inventarios Tab:
+
+Asignación de equipos/servicios a la orden
+
+Validación de disponibilidad de stock
+
+Asignación técnica de SIM/plan/APN (si aplica)
+
+Registro de responsable y fecha de asignación
+
+Observaciones de inventarios y estado técnico
+
+Bitácora de cambios y novedades
+
+Producción Tab:
+Gestión eficaz de la producción asociada y estado de los bienes/servicios.
+
+Logística Tab:
+Registro del despacho, datos de transportadoras, direcciones de entrega, historial logístico.
+
+Facturación Tab:
+Generación y control de facturación, comprobantes asociados.
+
+Financiera Tab:
+Control y registro de pagos, situación de cartera, términos y condiciones financieros.
