@@ -120,7 +120,8 @@ export function KanbanBoard() {
     setIsOrderModalOpen(true);
   };
 
-  const handleUpdateOrder = (orderId: number, updates: Partial<OrdenKanban>) => {
+  const handleUpdateOrder = async (orderId: number, updates: Partial<OrdenKanban>) => {
+    // Update local state first for immediate UI feedback
     setColumns(prevColumns => 
       prevColumns.map(column => ({
         ...column,
@@ -160,6 +161,9 @@ export function KanbanBoard() {
     if (selectedOrder?.id_orden_pedido === orderId) {
       setSelectedOrder(prev => prev ? { ...prev, ...updates } : null);
     }
+
+    // Refresh orders from database to ensure persistence
+    await loadOrders();
   };
 
   const handleCreateOrder = (newOrder: any) => {

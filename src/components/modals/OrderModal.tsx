@@ -4,6 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { OrdenKanban, OrdenEstado } from "@/types/database";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { 
   Building2, 
   User, 
@@ -88,12 +90,31 @@ export function OrderModal({
   const currentStage = STAGE_CONFIG[order.estado];
   const canAdvance = currentStage.nextStage !== null;
 
-  const handleAdvanceStage = () => {
+  const handleAdvanceStage = async () => {
     if (canAdvance && currentStage.nextStage) {
-      onUpdateOrder(order.id_orden_pedido, {
-        estado: currentStage.nextStage,
-        fecha_modificacion: new Date().toISOString(),
-      });
+      try {
+        // Update in database
+        const { error } = await supabase
+          .from('ordenpedido')
+          .update({ 
+            estado: currentStage.nextStage,
+            fecha_modificacion: new Date().toISOString()
+          })
+          .eq('id_orden_pedido', order.id_orden_pedido);
+
+        if (error) throw error;
+
+        // Update local state
+        onUpdateOrder(order.id_orden_pedido, {
+          estado: currentStage.nextStage,
+          fecha_modificacion: new Date().toISOString(),
+        });
+
+        toast.success(`Orden avanzada a ${STAGE_CONFIG[currentStage.nextStage!].label}`);
+      } catch (error) {
+        console.error('Error advancing stage:', error);
+        toast.error('Error al avanzar la orden');
+      }
     }
   };
 
@@ -149,11 +170,19 @@ export function OrderModal({
             <TabsList className="grid w-full grid-cols-6 mb-4">
               {Object.entries(STAGE_CONFIG).map(([key, config]) => {
                 const Icon = config.icon;
+                const stageOrder = Object.keys(STAGE_CONFIG);
+                const currentStageIndex = stageOrder.indexOf(order.estado);
+                const tabStageIndex = stageOrder.indexOf(key);
+                const isAccessible = tabStageIndex <= currentStageIndex;
+                
                 return (
                   <TabsTrigger 
                     key={key} 
                     value={key}
-                    className="flex items-center gap-2 text-xs px-2"
+                    disabled={!isAccessible}
+                    className={`flex items-center gap-2 text-xs px-2 ${
+                      !isAccessible ? 'opacity-40 cursor-not-allowed' : ''
+                    }`}
                   >
                     <Icon className="w-3 h-3" />
                     <span className="hidden sm:inline">{config.label}</span>
